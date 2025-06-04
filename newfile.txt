@@ -1,0 +1,2 @@
+Generate Token from Git hub
+Then push master/main using that token
