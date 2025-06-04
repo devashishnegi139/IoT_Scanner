@@ -1,35 +1,32 @@
-# scan_network.py
 from scapy.all import ARP, Ether, srp
 
 def scan(subnet):
-    # Creating an Ethernet Frame with destination MAC address set to broadcast
-    # Broadcast so that all devices in the subnet will receive this packet
+    """
+    Scans a given subnet using ARP and returns a list of active devices.
+
+    Args:
+        subnet (str): Target subnet or IP range, e.g., '192.168.1.0/24'.
+
+    Returns:
+        List[dict]: List of devices with 'ip' and 'mac' keys.
+    """
+    # Create broadcast Ethernet frame
     ether = Ether(dst="ff:ff:ff:ff:ff:ff")
 
-    # creating an ARP request packet
-    # pdst is the target IP address or subnet to scan
+    # Create ARP request for the given subnet
     arp = ARP(pdst=subnet)
 
-    # Enveloping the ARP request in the Ethernet frame
-    # This creates a complete packet that can be sent on the network
-    # / means we are combining the Ether and ARP layers
-    packet = ether/arp
+    # Combine Ethernet and ARP to form a complete packet
+    packet = ether / arp
 
-    # srp = send and recieve packets at layer 2 (Ethernet)
-    # The timeout is set to 2 seconds, which means it will wait for a response for that duration
-    # verbose=False suppresses the output of the packet sending process
-    # [0] means only the packets that were answered will be returned
-    # [1] would return the unanswered packets
-    # so this all mean send the packet and wait for responses for 2 seconds and return the answered packets
+    # Send the packet and collect responses
     ans = srp(packet, timeout=2, verbose=False)[0]
 
-    # creating a list to store the devices found
     devices = []
-
-    # in the ans, we ignore the sent packets and only focus on the received packets
-    for sent, received in ans:
-        devices.append({'ip': received.psrc,'mac': received.hwsrc})
-        # psrc = protocol source IP address
-        # hwsrc = hardware source MAC address
+    for _, received in ans:
+        devices.append({
+            'ip': received.psrc,      # Sender IP address
+            'mac': received.hwsrc     # Sender MAC address
+        })
 
     return devices
