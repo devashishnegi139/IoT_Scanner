@@ -9,7 +9,7 @@ def enrich_with_vendors(devices):
         devices (List[dict]): List of devices with 'mac' keys.
     """
     for device in devices:
-        # create a mac va
+        # create a mac variable to hold the MAC address
         mac = device['mac']
         try:
             # Fetch vendor information from the macvendors API
