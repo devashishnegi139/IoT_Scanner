@@ -13,3 +13,8 @@ if __name__ == "__main__":
 
     print(f"[*] Found {len(devices)} devices. Identifying vendors...")
     devices = enrich_with_vendors(devices)
+    '''
+    # testing if vendors are being shown or not
+    for dev in devices:
+        print(dev['vendor'])
+    '''
