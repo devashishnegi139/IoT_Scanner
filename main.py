@@ -1,7 +1,8 @@
 # main.py
 from scan_network import scan
+
 if __name__ == "__main__":
-    subnet = "192.168.233.0/24"
+    subnet = "192.168.223.0/24"
     print("[*] Scanning network...")
     devices = scan(subnet)
 
